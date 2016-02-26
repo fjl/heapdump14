@@ -254,6 +254,7 @@ border:1px solid grey;
 <tt>
 <h2>Object {{printf "%x" .Addr}} : {{.Typ}}</h2>
 <h3>{{.Size}} bytes</h3>
+<h3>Heap dominated by this object: {{.Dominates}} bytes</h3>
 <table>
 <tr>
 <td>Field</td>
@@ -273,8 +274,6 @@ border:1px solid grey;
 {{.}}
 <br>
 {{end}}
-<h3>Heap dominated by this object</h3>
-{{.Dominates}} bytes
 </tt>
 </body>
 </html>
@@ -410,19 +409,19 @@ border:1px solid grey;
 <body>
 <tt>
 <table>
+<col align="right">
+<col align="right">
 <col align="left">
-<col align="right">
-<col align="right">
 <tr>
-<td>Type</td>
 <td align="right">Count</td>
 <td align="right">Bytes</td>
+<td>Type</td>
 </tr>
 {{range .}}
 <tr>
-<td>{{.Name}}</td>
 <td align="right">{{.Count}}</td>
 <td align="right">{{.Bytes}}</td>
+<td>{{.Name}}</td>
 </tr>
 {{end}}
 </table>
@@ -888,6 +887,8 @@ func main() {
 		usage()
 		return
 	}
+
+	log.SetFlags(log.Lshortfile)
 
 	fmt.Println("Loading...")
 	d = read.Read(dump, exec)
