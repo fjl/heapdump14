@@ -1133,7 +1133,7 @@ func dwarfGCSig(d *Dump, typ dwarfType) string {
 			log.Fatalf("dwarfGCSig can't handle field %s.%s (%T)", typ.Name(), fs[i].name, fs[i].type_)
 		}
 	}
-	return s
+	return strings.TrimRight(s, "S")
 }
 
 // Some type names in the dwarf info don't match the corresponding
@@ -2089,9 +2089,8 @@ func nameFullTypes(d *Dump, pc *propagateContext) {
 				log.Printf("gc signature %q not unique (%d dwarf types match)", ft.GCSig, len(maybedt))
 				// append candidate names if there aren't that many
 				if len(maybedt) < 5 {
-					ft.Name += " "
 					for _, dt := range maybedt {
-						ft.Name += dt.Name() + "|"
+						ft.Name += " " + dt.Name()
 					}
 				}
 			}
